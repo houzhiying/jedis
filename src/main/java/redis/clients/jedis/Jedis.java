@@ -646,6 +646,12 @@ public class Jedis extends BinaryJedis implements JedisCommands, MultiKeyCommand
     return client.getIntegerReply();
   }
 
+  public String hmsetex(String key, long expire, final Map<String, String> hash) {
+    checkIsInMultiOrPipeline();
+    client.hmsetex(key, expire, hash);
+    return client.getStatusCodeReply();
+  }
+
   public String hgetex(final String key, final long expire, final String field) {
     checkIsInMultiOrPipeline();
     client.hgetex(key, expire, field);

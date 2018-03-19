@@ -99,6 +99,8 @@ public interface JedisCommands {
 
   Long hsetex(final String key, final long expire, final String field, final String value);
 
+  String hmsetex(final String key, final long expire, final Map<String, String> hash);
+
   String hgetex(final String key, final long expire, final String field);
 
   Long hdelex(final String key, final long expire, final String field);

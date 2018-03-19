@@ -24,7 +24,7 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   }
 
   public JedisCluster(HostAndPort node) {
-	this(Collections.singleton(node), DEFAULT_TIMEOUT);
+    this(Collections.singleton(node), DEFAULT_TIMEOUT);
   }
 
   public JedisCluster(HostAndPort node, int timeout) {
@@ -54,13 +54,16 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   }
 
   public JedisCluster(HostAndPort node, int connectionTimeout, int soTimeout,
-                      int maxAttempts, String password, final GenericObjectPoolConfig poolConfig) {
-    super(Collections.singleton(node), connectionTimeout, soTimeout, maxAttempts, password, poolConfig);
+      int maxAttempts, String password, final GenericObjectPoolConfig poolConfig) {
+    super(Collections.singleton(node), connectionTimeout, soTimeout, maxAttempts, password,
+        poolConfig);
   }
 
   public JedisCluster(HostAndPort node, int connectionTimeout, int soTimeout,
-          int maxAttempts, String password, String clientName, final GenericObjectPoolConfig poolConfig) {
-    super(Collections.singleton(node), connectionTimeout, soTimeout, maxAttempts, password, clientName, poolConfig);
+      int maxAttempts, String password, String clientName,
+      final GenericObjectPoolConfig poolConfig) {
+    super(Collections.singleton(node), connectionTimeout, soTimeout, maxAttempts, password,
+        clientName, poolConfig);
   }
 
   public JedisCluster(Set<HostAndPort> nodes) {
@@ -79,7 +82,8 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
     this(nodes, DEFAULT_TIMEOUT, DEFAULT_MAX_REDIRECTIONS, poolConfig);
   }
 
-  public JedisCluster(Set<HostAndPort> nodes, int timeout, final GenericObjectPoolConfig poolConfig) {
+  public JedisCluster(Set<HostAndPort> nodes, int timeout,
+      final GenericObjectPoolConfig poolConfig) {
     this(nodes, timeout, DEFAULT_MAX_REDIRECTIONS, poolConfig);
   }
 
@@ -94,14 +98,16 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   }
 
   public JedisCluster(Set<HostAndPort> jedisClusterNode, int connectionTimeout, int soTimeout,
-                      int maxAttempts, String password, final GenericObjectPoolConfig poolConfig) {
+      int maxAttempts, String password, final GenericObjectPoolConfig poolConfig) {
     super(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, password, poolConfig);
   }
 
   public JedisCluster(Set<HostAndPort> jedisClusterNode, int connectionTimeout, int soTimeout,
-          int maxAttempts, String password, String clientName, final GenericObjectPoolConfig poolConfig) {
-    super(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, password, clientName, poolConfig);
-}
+      int maxAttempts, String password, String clientName,
+      final GenericObjectPoolConfig poolConfig) {
+    super(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, password, clientName,
+        poolConfig);
+  }
 
   @Override
   public String set(final String key, final String value) {
@@ -530,6 +536,11 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   }
 
   @Override
+  public String hmsetex(String key, long expire, Map<String, String> hash) {
+    return null;
+  }
+
+  @Override
   public String hgetex(String key, long expire, String field) {
     return null;
   }
@@ -836,7 +847,8 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   }
 
   @Override
-  public Long zadd(final String key, final Map<String, Double> scoreMembers, final ZAddParams params) {
+  public Long zadd(final String key, final Map<String, Double> scoreMembers,
+      final ZAddParams params) {
     return new JedisClusterCommand<Long>(connectionHandler, maxAttempts) {
       @Override
       public Long execute(Jedis connection) {
@@ -1100,7 +1112,8 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   }
 
   @Override
-  public Set<Tuple> zrevrangeByScoreWithScores(final String key, final double max, final double min) {
+  public Set<Tuple> zrevrangeByScoreWithScores(final String key, final double max,
+      final double min) {
     return new JedisClusterCommand<Set<Tuple>>(connectionHandler, maxAttempts) {
       @Override
       public Set<Tuple> execute(Jedis connection) {
@@ -1142,7 +1155,8 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   }
 
   @Override
-  public Set<Tuple> zrevrangeByScoreWithScores(final String key, final String max, final String min) {
+  public Set<Tuple> zrevrangeByScoreWithScores(final String key, final String max,
+      final String min) {
     return new JedisClusterCommand<Set<Tuple>>(connectionHandler, maxAttempts) {
       @Override
       public Set<Tuple> execute(Jedis connection) {
@@ -1354,23 +1368,25 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
     String matchPattern = null;
 
     if (params == null || (matchPattern = params.match()) == null || matchPattern.isEmpty()) {
-      throw new IllegalArgumentException(JedisCluster.class.getSimpleName() + " only supports SCAN commands with non-empty MATCH patterns");
+      throw new IllegalArgumentException(JedisCluster.class.getSimpleName()
+          + " only supports SCAN commands with non-empty MATCH patterns");
     }
 
     if (JedisClusterHashTagUtil.isClusterCompliantMatchPattern(matchPattern)) {
 
-      return new JedisClusterCommand< ScanResult<String>>(connectionHandler,
-              maxAttempts) {
+      return new JedisClusterCommand<ScanResult<String>>(connectionHandler,
+          maxAttempts) {
         @Override
         public ScanResult<String> execute(Jedis connection) {
           return connection.scan(cursor, params);
         }
       }.runBinary(SafeEncoder.encode(matchPattern));
     } else {
-      throw new IllegalArgumentException(JedisCluster.class.getSimpleName() + " only supports SCAN commands with MATCH patterns containing hash-tags ( curly-brackets enclosed strings )");
+      throw new IllegalArgumentException(JedisCluster.class.getSimpleName()
+          + " only supports SCAN commands with MATCH patterns containing hash-tags ( curly-brackets enclosed strings )");
     }
   }
-  
+
   @Override
   public Long bitpos(final String key, final boolean value) {
     return new JedisClusterCommand<Long>(connectionHandler, maxAttempts) {
@@ -1912,9 +1928,9 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
    */
 
   /**
-   * @deprecated SetParams is scheduled to be introduced at next major release Please use setnx
-   *             instead for now
    * @see <a href="https://github.com/xetorthio/jedis/pull/878">issue#878</a>
+   * @deprecated SetParams is scheduled to be introduced at next major release Please use setnx
+   * instead for now
    */
   @Deprecated
   @Override
@@ -1952,7 +1968,7 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
 
   /**
    * @deprecated Redis Cluster uses only db index 0, so it doesn't make sense. scheduled to be
-   *             removed on next major release
+   * removed on next major release
    */
   @Deprecated
   @Override
@@ -1968,6 +1984,7 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   /**
    * This method is deprecated due to bug (scan cursor should be unsigned long) And will be removed
    * on next major release
+   *
    * @see <a href="https://github.com/xetorthio/jedis/issues/531">issue#531</a>
    */
   @Deprecated
@@ -1985,6 +2002,7 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   /**
    * This method is deprecated due to bug (scan cursor should be unsigned long) And will be removed
    * on next major release
+   *
    * @see <a href="https://github.com/xetorthio/jedis/issues/531">issue#531</a>
    */
   @Deprecated
@@ -2001,6 +2019,7 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   /**
    * This method is deprecated due to bug (scan cursor should be unsigned long) And will be removed
    * on next major release
+   *
    * @see <a href="https://github.com/xetorthio/jedis/issues/531">issue#531</a>
    */
   @Deprecated

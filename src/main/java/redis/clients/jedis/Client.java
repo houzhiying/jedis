@@ -182,6 +182,14 @@ public class Client extends BinaryClient implements Commands {
     hsetex(SafeEncoder.encode(key), expire, SafeEncoder.encode(field), SafeEncoder.encode(value));
   }
 
+  public void hmsetex(final String key, final Long expire, final Map<String, String> hash) {
+    final Map<byte[], byte[]> bhash = new HashMap<byte[], byte[]>(hash.size());
+    for (final Entry<String, String> entry : hash.entrySet()) {
+      bhash.put(SafeEncoder.encode(entry.getKey()), SafeEncoder.encode(entry.getValue()));
+    }
+    hmsetex(SafeEncoder.encode(key),expire, bhash);
+  }
+
   public void hgetex(final String key, final Long expire, final String field) {
     hgetex(SafeEncoder.encode(key), expire, SafeEncoder.encode(field));
   }

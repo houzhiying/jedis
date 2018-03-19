@@ -272,6 +272,18 @@ public class BinaryClient extends Connection {
     sendCommand(HMSET, params.toArray(new byte[params.size()][]));
   }
 
+  public void hmsetex(final byte[] key, final long expire, final Map<byte[], byte[]> hash) {
+    final List<byte[]> params = new ArrayList<byte[]>();
+    params.add(key);
+    params.add(toByteArray(expire));
+
+    for (final Entry<byte[], byte[]> entry : hash.entrySet()) {
+      params.add(entry.getKey());
+      params.add(entry.getValue());
+    }
+    sendCommand(HMSETEX, params.toArray(new byte[params.size()][]));
+  }
+
   public void hmget(final byte[] key, final byte[]... fields) {
     final byte[][] params = new byte[fields.length + 1][];
     params[0] = key;

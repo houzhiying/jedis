@@ -281,6 +281,11 @@ public class ShardedJedis extends BinaryShardedJedis implements JedisCommands, C
   }
 
   @Override
+  public String hmsetex(String key, long expire, Map<String, String> hash) {
+    return null;
+  }
+
+  @Override
   public String hgetex(String key, long expire, String field) {
     return null;
   }
