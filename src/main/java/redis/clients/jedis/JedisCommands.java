@@ -103,7 +103,7 @@ public interface JedisCommands {
 
   String hgetex(final String key, final long expire, final String field);
 
-  Long hdelex(final String key, final long expire, final String field);
+  Long hdelex(final String key, final long expire, final String... fields);
 
   Long hclear(String key);
 

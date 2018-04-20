@@ -257,8 +257,12 @@ public class BinaryClient extends Connection {
     sendCommand(HGETEX, key, toByteArray(expire), field);
   }
 
-  public void hdelex(final byte[] key, final long expire, final byte[] field) {
-    sendCommand(HDELEX, key, toByteArray(expire), field);
+  public void hdelex(final byte[] key, final long expire, final byte[]... fields) {
+    final byte[][] params = new byte[fields.length + 2][];
+    params[0] = key;
+    params[1] = toByteArray(expire);
+    System.arraycopy(fields, 0, params, 2, fields.length);
+    sendCommand(HDELEX, params);
   }
 
   public void hmset(final byte[] key, final Map<byte[], byte[]> hash) {
@@ -780,30 +784,32 @@ public class BinaryClient extends Connection {
   public void zrangeByScoreWithScores(final byte[] key, final double min, final double max,
       final int offset, final int count) {
 
-    sendCommand(ZRANGEBYSCORE, key, toByteArray(min), toByteArray(max), LIMIT.raw,
+    sendCommand(ZRANGEBYSCORE, key, toByteArray(min), toByteArray(max), WITHSCORES.raw, LIMIT.raw,
         toByteArray(offset),
-        toByteArray(count), WITHSCORES.raw);
+        toByteArray(count));
   }
 
   public void zrangeByScoreWithScores(final byte[] key, final String min, final String max,
       final int offset, final int count) {
-    sendCommand(ZRANGEBYSCORE, key, min.getBytes(), max.getBytes(), LIMIT.raw, toByteArray(offset),
-        toByteArray(count), WITHSCORES.raw);
+    sendCommand(ZRANGEBYSCORE, key, min.getBytes(), max.getBytes(), WITHSCORES.raw, LIMIT.raw,
+        toByteArray(offset),
+        toByteArray(count));
   }
 
   public void zrevrangeByScoreWithScores(final byte[] key, final double max, final double min,
       final int offset, final int count) {
 
-    sendCommand(ZREVRANGEBYSCORE, key, toByteArray(max), toByteArray(min), LIMIT.raw,
+    sendCommand(ZREVRANGEBYSCORE, key, toByteArray(max), toByteArray(min), WITHSCORES.raw,
+        LIMIT.raw,
         toByteArray(offset),
-        toByteArray(count), WITHSCORES.raw);
+        toByteArray(count));
   }
 
   public void zrevrangeByScoreWithScores(final byte[] key, final String max, final String min,
       final int offset, final int count) {
 
-    sendCommand(ZREVRANGEBYSCORE, key, max.getBytes(), min.getBytes(), LIMIT.raw,
-        toByteArray(offset), toByteArray(count), WITHSCORES.raw);
+    sendCommand(ZREVRANGEBYSCORE, key, max.getBytes(), min.getBytes(), WITHSCORES.raw, LIMIT.raw,
+        toByteArray(offset), toByteArray(count));
   }
 
   public void zrangeByScore(final byte[] key, final byte[] min, final byte[] max, final int offset,
@@ -827,14 +833,14 @@ public class BinaryClient extends Connection {
 
   public void zrangeByScoreWithScores(final byte[] key, final byte[] min, final byte[] max,
       final int offset, final int count) {
-    sendCommand(ZRANGEBYSCORE, key, min, max, LIMIT.raw, toByteArray(offset), toByteArray(count),
-        WITHSCORES.raw);
+    sendCommand(ZRANGEBYSCORE, key, min, max, WITHSCORES.raw, LIMIT.raw, toByteArray(offset),
+        toByteArray(count));
   }
 
   public void zrevrangeByScoreWithScores(final byte[] key, final byte[] max, final byte[] min,
       final int offset, final int count) {
-    sendCommand(ZREVRANGEBYSCORE, key, max, min, LIMIT.raw, toByteArray(offset),
-        toByteArray(count), WITHSCORES.raw);
+    sendCommand(ZREVRANGEBYSCORE, key, max, min, WITHSCORES.raw, LIMIT.raw, toByteArray(offset),
+        toByteArray(count));
   }
 
   public void zremrangeByRank(final byte[] key, final long start, final long end) {

@@ -546,7 +546,7 @@ public class JedisCluster extends BinaryJedisCluster implements JedisCommands,
   }
 
   @Override
-  public Long hdelex(String key, long expire, String field) {
+  public Long hdelex(String key, long expire, String... fields) {
     return null;
   }
 

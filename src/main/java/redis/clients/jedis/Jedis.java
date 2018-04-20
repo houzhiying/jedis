@@ -658,9 +658,9 @@ public class Jedis extends BinaryJedis implements JedisCommands, MultiKeyCommand
     return client.getStatusCodeReply();
   }
 
-  public Long hdelex(final String key, final long expire, final String field) {
+  public Long hdelex(final String key, final long expire, final String... fields) {
     checkIsInMultiOrPipeline();
-    client.hdelex(key, expire, field);
+    client.hdelex(key, expire, fields);
     return client.getIntegerReply();
   }
 

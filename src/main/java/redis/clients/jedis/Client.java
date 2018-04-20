@@ -194,8 +194,12 @@ public class Client extends BinaryClient implements Commands {
     hgetex(SafeEncoder.encode(key), expire, SafeEncoder.encode(field));
   }
 
-  public void hdelex(final String key, final Long expire, final String field) {
-    hdelex(SafeEncoder.encode(key), expire, SafeEncoder.encode(field));
+  public void hdelex(final String key, final Long expire, final String... fields) {
+    final byte[][] bfields = new byte[fields.length][];
+    for (int i = 0; i < bfields.length; i++) {
+      bfields[i] = SafeEncoder.encode(fields[i]);
+    }
+    hdelex(SafeEncoder.encode(key), expire, bfields);
   }
 
   public void hmset(final String key, final Map<String, String> hash) {

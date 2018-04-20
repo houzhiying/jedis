@@ -291,7 +291,7 @@ public class ShardedJedis extends BinaryShardedJedis implements JedisCommands, C
   }
 
   @Override
-  public Long hdelex(String key, long expire, String field) {
+  public Long hdelex(String key, long expire, String... fields) {
     return null;
   }
 
